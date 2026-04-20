@@ -1,0 +1,194 @@
+# minimax-ymcp
+
+**MiniMax MCP 服务器 — 一包搞定 11 个工具，开箱即用**
+
+本包是 [minimax-mcp](https://github.com/MiniMax-Open/minimax-mcp) 的独立增强版：
+
+- ✅ 官方 9 个工具（语音、视频、图片、音乐、克隆）
+- 🆕 新增 `web_search`（实时搜索）
+- 🆕 新增 `understand_image`（图片理解）
+- 🎵 音乐模型升级为 `music-2.6`（官方默认是 music-2.0，已停用）
+
+## 快速安装（3 步搞定）
+
+**第一步：安装 uv（如果没装过）**
+
+```bash
+# Windows
+pip install uv
+
+# Linux / macOS
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+**第二步：获取 API Key**
+
+- 国内用户：[platform.minimaxi.com](https://platform.minimaxi.com/user-center/basic-information/interface-key)
+- 海外用户：[platform.minimaxi.io](https://www.minimaxi.io/platform/user-center/basic-information/interface-key)
+
+**第三步：配置到你的 AI 工具**
+
+把下面的 JSON 复制到对应工具的 MCP 设置里：
+
+```json
+{
+  "mcpServers": {
+    "minimax-ymcp": {
+      "command": "uvx",
+      "args": ["--from", "/你的/路径/minimax-ymcp", "minimax-ymcp"],
+      "env": {
+        "MINIMAX_API_KEY": "你的API密钥",
+        "MINIMAX_API_HOST": "https://api.minimaxi.com"
+      }
+    }
+  }
+}
+```
+
+> ⚠️ **国内用户**：`MINIMAX_API_HOST` 填 `https://api.minimaxi.com`  
+> ⚠️ **海外用户**：`MINIMAX_API_HOST` 填 `https://api.minimax.io`
+
+---
+
+## 支持的工具（11 个）
+
+| 工具 | 说明 |
+|------|------|
+| `text_to_audio` | 文字转语音 |
+| `list_voices` | 查看可用音色 |
+| `voice_clone` | 克隆音色 |
+| `play_audio` | 播放音频 |
+| `generate_video` | 文字/图片转视频 |
+| `query_video_generation` | 查询视频生成结果 |
+| `text_to_image` | 文字生图 |
+| `music_generation` | 文字+歌词生成音乐 |
+| `voice_design` | 描述性语音设计 |
+| `web_search` | 🆕 实时网络搜索 |
+| `understand_image` | 🆕 AI 图片理解 |
+
+---
+
+## 各平台配置方法
+
+### Trae（Windows）
+
+1. 打开 `C:\Users\你的用户名\AppData\Roaming\Trae\mcp_settings.json`
+2. 在 `mcpServers` 里加入上面的 JSON
+3. 保存后按 `Ctrl+Shift+P` → 输入 **Reload MCP Servers** → 回车
+
+### Claude Desktop（Windows / Mac）
+
+1. 找到配置文件：
+   - **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+   - **Mac**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+2. 加入上面的 JSON
+3. 重启 Claude Desktop
+
+> ⚠️ **Windows 用户**：首次使用需要开启开发者模式。点击 Claude Desktop 的 **Help → Enable Developer Mode**。
+
+### Cursor
+
+`Cursor → Settings → MCP → Add new global MCP Server`，粘贴上面的 JSON。
+
+### Windsurf
+
+`Windsurf → Settings → MCP → Add Server`，粘贴上面的 JSON。
+
+### OpenClaw
+
+`Settings → MCP Servers → Add`，粘贴上面的 JSON。
+
+### Claude Code
+
+在 `~/.claude/settings.json` 或项目根目录的 `mcp.json` 加入配置。
+
+### Hermes Agent
+
+在 `~/.hermes/config.yaml` 的 `mcp_servers` 节点加入：
+
+```yaml
+mcp_servers:
+  minimax-ymcp:
+    command: uvx
+    args: ["--from", "/你的/路径/minimax-ymcp", "minimax-ymcp"]
+    env:
+      MINIMAX_API_KEY: "你的API密钥"
+      MINIMAX_API_HOST: "https://api.minimaxi.com"
+```
+
+### 自定义 Python 客户端
+
+```python
+from minimax_ymcp.server import main
+
+# 设置环境变量
+import os
+os.environ["MINIMAX_API_KEY"] = "你的API密钥"
+os.environ["MINIMAX_API_HOST"] = "https://api.minimaxi.com"
+
+# 启动服务器
+main()
+```
+
+---
+
+## 常见问题
+
+**Q: 报错 `invalid api key`？**
+
+检查两点：
+1. API Key 是否正确（没有多余空格）
+2. `MINIMAX_API_HOST` 是否和 Key 的地区匹配：
+   - 国内平台生成的 Key → 用 `api.minimaxi.com`
+   - 海外平台生成的 Key → 用 `api.minimax.io`
+
+**Q: 工具列表为空或报 404？**
+
+你的 AI 客户端可能没有正确加载 MCP 配置。尝试重启客户端，或确认 JSON 格式正确（注意逗号和引号）。
+
+**Q: 音乐生成报错 `model not supported`？**
+
+本包已将默认音乐模型升级为 `music-2.6`。如果仍报错，说明你的账号套餐不支持该模型，请到 MiniMax 控制台查看。
+
+**Q: Windows 上 `uvx` 找不到？**
+
+先运行 `pip install uv`，或者用 Python 直接运行：
+
+```json
+{
+  "command": "C:\\Python311\\python.exe",
+  "args": ["-m", "minimax_ymcp"],
+  "env": { ... }
+}
+```
+
+---
+
+## 本地开发安装
+
+```bash
+# 克隆本仓库（或者下载解压到本地）
+cd minimax-ymcp
+
+# 创建虚拟环境
+python -m venv venv
+
+# 激活（Windows）
+venv\Scripts\activate
+# Linux / macOS:
+# source venv/bin/activate
+
+# 安装
+pip install -e .
+
+# 运行测试
+python -m minimax_ymcp
+```
+
+---
+
+## 项目信息
+
+- 基于 [MiniMax-Open/minimax-mcp](https://github.com/MiniMax-Open/minimax-mcp) 构建
+- MIT License
+- 本包为独立维护，不依赖官方包，可单独安装使用
