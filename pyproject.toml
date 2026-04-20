@@ -1,0 +1,43 @@
+[project]
+name = "minimax-ymcp"
+version = "0.1.0"
+description = "Minimax-Y MCP Server: extends official minimax-mcp with web_search and understand_image (11 tools total)"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+    { name = "Minimax-Y Contributor" }
+]
+requires-python = ">=3.10"
+keywords = ["minimax", "mcp", "web-search", "vision", "text-to-speech"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+dependencies = [
+    "mcp[cli]>=1.6.0",
+    "fastapi>=0.109.2",
+    "uvicorn>=0.27.1",
+    "python-dotenv>=1.0.1",
+    "pydantic>=2.6.1",
+    "httpx>=0.28.1",
+    "fuzzywuzzy>=0.18.0",
+    "python-Levenshtein>=0.25.0",
+    "sounddevice>=0.5.1",
+    "soundfile>=0.13.1",
+    "requests>=2.31.0",
+]
+
+[project.scripts]
+minimax-ymcp = "minimax_ymcp.server:main"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project.urls]
+Homepage = "https://github.com/MiniMax-Y/minimax-ymcp"
+Repository = "https://github.com/MiniMax-Y/minimax-ymcp"
